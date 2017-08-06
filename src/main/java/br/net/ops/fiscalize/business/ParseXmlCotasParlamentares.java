@@ -34,7 +34,7 @@ import br.net.ops.fiscalize.util.Utilidade;
 public class ParseXmlCotasParlamentares {
 
 	//private static final String XML_ENCODING = "CP850";
-	private static final String XML_ENCODING = "UTF-16";
+	private static final String XML_ENCODING = "UTF-8";
 	private static final String XML_DESPESA = "DESPESA";
 	
 	private Logger logger;
