@@ -20,54 +20,49 @@ import br.net.ops.fiscalize.util.Utilidade;
 @Component
 public class DatabaseCotasParlamentares {
 
-	private Logger logger;
-	
-	private long inicio;
-	
-	@Autowired
-	private DespesaDao despesaDao;
-	
-	public DatabaseCotasParlamentares() {
-		this.inicio = System.currentTimeMillis();
-		this.logger = Utilidade.getLogger();
-	}
-	
-	@Transactional
-	public void carregarBancoDados(List<Despesa> despesas) throws CargaDespesaException, DespesaReflectionException {
-		logger.log(Level.INFO, "Iniciando leitura e salvamento dos registros no banco de dados...");
-		
-		long ultimoLog = System.currentTimeMillis();
-		int iteracao=0;
-		int validos=0;
-		for(Despesa despesa:despesas) {
-			try {
-				List<Despesa> despesasExistentes = despesaDao.findByExample(despesa);
-				if(despesasExistentes.size()==0) {
-					despesa.setDataInclusao(new Date(System.currentTimeMillis()));
-					despesaDao.save(despesa);	
-				} else {
-					logger.log(Level.WARNING, "Despesa " + iteracao + " já existe, ignorada!");
-				}
-				validos++;
-			} catch(HibernateException e) {
-				logger.log(Level.WARNING, "Erro ao salvar DESPESA: " + iteracao + " Erro: " + e.getLocalizedMessage());
-				if(e.getCause()!=null) {
-					logger.log(Level.WARNING, "CAUSA: " + iteracao + " Erro: " + e.getCause().getLocalizedMessage());
-				}
-			}
-			
-			iteracao++;
-            if(System.currentTimeMillis() - ultimoLog > Utilidade.LOG_INTERVAL) {
-            	logger.log(Level.INFO, "Lendo (e tentando salvar) registro " + iteracao);
-				ultimoLog = System.currentTimeMillis();
-			}
-            
-		}
-		
-		logger.log(Level.INFO, "Tempo de salvamento em banco: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
+    private Logger logger;
+
+    private long inicio;
+
+    @Autowired
+    private DespesaDao despesaDao;
+
+    public DatabaseCotasParlamentares() {
+        this.inicio = System.currentTimeMillis();
+        this.logger = Utilidade.getLogger();
+    }
+
+    @Transactional
+    public void carregarBancoDados(List<Despesa> despesas) throws CargaDespesaException, DespesaReflectionException {
+        logger.log(Level.INFO, "Iniciando leitura e salvamento dos registros no banco de dados...");
+
+        long ultimoLog = System.currentTimeMillis();
+        int iteracao = 0;
+        int validos = 0;
+        for (Despesa despesa : despesas) {
+            try {
+                despesa.setDataInclusao(new Date(System.currentTimeMillis()));
+                despesaDao.save(despesa);
+                validos++;
+            } catch (HibernateException e) {
+                logger.log(Level.WARNING, "Erro ao salvar DESPESA: " + iteracao + " Erro: " + e.getLocalizedMessage());
+                if (e.getCause() != null) {
+                    logger.log(Level.WARNING, "CAUSA: " + iteracao + " Erro: " + e.getCause().getLocalizedMessage());
+                }
+            }
+
+            iteracao++;
+            if (System.currentTimeMillis() - ultimoLog > Utilidade.LOG_INTERVAL) {
+                logger.log(Level.INFO, "Lendo (e tentando salvar) registro " + iteracao);
+                ultimoLog = System.currentTimeMillis();
+            }
+
+        }
+
+        logger.log(Level.INFO, "Tempo de salvamento em banco: " + (System.currentTimeMillis() - inicio) / 1000 + " segundos");
         logger.log(Level.INFO, "Registros lidos: " + iteracao);
         logger.log(Level.INFO, "Registros válidos: " + validos);
-		
-	}
-	
+
+    }
+
 }
