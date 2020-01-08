@@ -1,21 +1,19 @@
 package br.net.ops.fiscalize.business;
 
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.hibernate.HibernateException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.net.ops.fiscalize.dao.DespesaDao;
 import br.net.ops.fiscalize.domain.Despesa;
 import br.net.ops.fiscalize.exception.CargaDespesaException;
 import br.net.ops.fiscalize.exception.DespesaReflectionException;
 import br.net.ops.fiscalize.util.Utilidade;
+import org.hibernate.HibernateException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class DatabaseCotasParlamentares {
